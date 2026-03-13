@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getHalls, bookHall } from "../api";
 
 const TIME_SLOTS = [
-  '09:00:00', 
+  '09:00:00',
   '10:00:00',
   '11:00:00',
   '12:00:00',
@@ -65,7 +65,7 @@ function BookHall() {
       });
       navigate('/confirmation', {
         state: {
-          booking: res.data?.data,
+          booking: res.data?.data || { hall: selectedHall.id, date, start_time: startTime, end_time: endTime },
           message: res.data?.message || 'Hall booked successfully',
         },
       });
@@ -73,6 +73,7 @@ function BookHall() {
       const msg =
         err.response?.data?.hall?.[0] ||
         err.response?.data?.user?.[0] ||
+        err.response?.data?.error ||
         JSON.stringify(err.response?.data || err.message);
       setError(String(msg));
     } finally {
@@ -83,7 +84,16 @@ function BookHall() {
   if (loading) {
     return (
       <div className="page">
-        <div className="loading">Loading halls...</div>
+        <header className="page-header">
+          <h1>Book a Hall</h1>
+          <p className="subtitle">Loading halls...</p>
+        </header>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div className="skeleton" style={{ height: 56, borderRadius: 'var(--radius-md)' }}></div>
+          <div className="skeleton" style={{ height: 56, borderRadius: 'var(--radius-md)' }}></div>
+          <div className="skeleton" style={{ height: 56, borderRadius: 'var(--radius-md)' }}></div>
+          <div className="skeleton" style={{ height: 56, borderRadius: 'var(--radius-md)' }}></div>
+        </div>
       </div>
     );
   }
@@ -167,28 +177,10 @@ function BookHall() {
           className="btn btn-primary"
           disabled={submitting}
         >
+          {submitting && <span className="spinner"></span>}
           {submitting ? 'Booking...' : 'Confirm Booking'}
         </button>
       </form>
-
-      <nav className="bottom-nav">
-        <Link to="/" className="nav-item">
-          <span className="nav-icon">🏠</span>
-          <span>Dashboard</span>
-        </Link>
-        <span className="nav-item active">
-          <span className="nav-icon">📅</span>
-          <span>Book</span>
-        </span>
-        <Link to="/waiting-list" className="nav-item">
-          <span className="nav-icon">⏳</span>
-          <span>Waiting</span>
-        </Link>
-        <Link to="/my-bookings" className="nav-item">
-          <span className="nav-icon">✓</span>
-          <span>My Bookings</span>
-        </Link>
-      </nav>
     </div>
   );
 }

@@ -32,13 +32,15 @@ function BookingConfirmation() {
                 {String(booking.end_time || '').slice(0, 5)}
               </dd>
               <dt>Status</dt>
-              <dd className="status-badge status-scheduled">Scheduled</dd>
+              <dd>
+                <span className="status-badge status-scheduled">Scheduled</span>
+              </dd>
             </dl>
           </>
         ) : (
           <>
             <div className="confirmation-icon">✓</div>
-            <p>{message}</p>
+            <p style={{ color: 'var(--gray-600)', fontSize: 15 }}>{message}</p>
           </>
         )}
       </div>
@@ -51,25 +53,6 @@ function BookingConfirmation() {
           Book another hall
         </Link>
       </div>
-
-      <nav className="bottom-nav">
-        <Link to="/" className="nav-item">
-          <span className="nav-icon">🏠</span>
-          <span>Dashboard</span>
-        </Link>
-        <Link to="/book" className="nav-item">
-          <span className="nav-icon">📅</span>
-          <span>Book</span>
-        </Link>
-        <Link to="/waiting-list" className="nav-item">
-          <span className="nav-icon">⏳</span>
-          <span>Waiting</span>
-        </Link>
-        <Link to="/my-bookings" className="nav-item active">
-          <span className="nav-icon">✓</span>
-          <span>My Bookings</span>
-        </Link>
-      </nav>
     </div>
   );
 }

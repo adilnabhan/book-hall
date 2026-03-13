@@ -16,6 +16,25 @@ const STATUS_COLORS = {
   waiting: 'status-waiting',
 };
 
+/* Skeleton loading card */
+function SkeletonCard() {
+  return (
+    <div className="hall-card" style={{ pointerEvents: 'none' }}>
+      <div className="hall-card-header">
+        <div className="skeleton skeleton-text" style={{ width: '55%', height: '18px' }}></div>
+        <div className="skeleton" style={{ width: '80px', height: '28px', borderRadius: '9999px' }}></div>
+      </div>
+      <div className="hall-card-body" style={{ marginTop: 14 }}>
+        <div className="skeleton skeleton-text short"></div>
+        <div className="skeleton skeleton-text" style={{ width: '65%' }}></div>
+      </div>
+      <div className="hall-card-footer" style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid var(--gray-100)' }}>
+        <div className="skeleton skeleton-text" style={{ width: '40%', height: '12px' }}></div>
+      </div>
+    </div>
+  );
+}
+
 function Dashboard() {
   const [halls, setHalls] = useState([]);
   const [availability, setAvailability] = useState({});
@@ -56,15 +75,17 @@ function Dashboard() {
     return avail?.status || 'available';
   };
 
+  const username = localStorage.getItem("username") || "User";
+
   return (
     <div className="page">
       <header className="page-header">
         <div className="hero-card">
           <div className="hero-text">
-            <p className="hero-greeting">Hello {localStorage.getItem("username") || "User"}</p>
+            <p className="hero-greeting">Hello, {username} 👋</p>
             <h1 className="hero-title">Lecture Hall Booking</h1>
             <p className="hero-subtitle">
-              Welcome to the Lecture Hall Booking System.
+              Find and book lecture halls instantly
             </p>
           </div>
         </div>
@@ -89,7 +110,16 @@ function Dashboard() {
       )}
 
       {loading ? (
-        <div className="loading">Loading halls...</div>
+        <div className="hall-grid">
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
+      ) : halls.length === 0 ? (
+        <div className="empty-state">
+          <span className="empty-icon">🏫</span>
+          <p>No lecture halls found</p>
+        </div>
       ) : (
         <div className="hall-grid">
           {halls.map((hall) => {
@@ -109,8 +139,8 @@ function Dashboard() {
                   </span>
                 </div>
                 <div className="hall-card-body">
-                  <p className="hall-capacity">Capacity: {hall.capacity}</p>
-                  <p className="hall-location">{hall.location}</p>
+                  <p className="hall-capacity">👥 Capacity: {hall.capacity}</p>
+                  <p className="hall-location">📍 {hall.location}</p>
                 </div>
                 <div className="hall-card-footer">
                   <span className="card-action">Book this hall →</span>
@@ -120,39 +150,8 @@ function Dashboard() {
           })}
         </div>
       )}
-
-
-<nav className="bottom-nav">
-  <Link to="/" className="nav-item active">
-    <span className="nav-icon">🏠</span>
-    <span>Dashboard</span>
-  </Link>
-
-  <Link to="/book" className="nav-item">
-    <span className="nav-icon">📅</span>
-    <span>Book</span>
-  </Link>
-
-  <Link to="/waiting-list" className="nav-item">
-    <span className="nav-icon">⏳</span>
-    <span>Waiting</span>
-  </Link>
-
-  <Link to="/my-bookings" className="nav-item">
-    <span className="nav-icon">✓</span>
-    <span>My Bookings</span>
-  </Link>
-
-  <Link to="/admin" className="nav-item">
-    <span className="nav-icon">⚙</span>
-    <span>Admin</span>
-  </Link>
-</nav>
     </div>
   );
 }
 
 export default Dashboard;
-
-
-

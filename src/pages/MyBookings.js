@@ -16,6 +16,22 @@ const STATUS_COLORS = {
   completed: 'status-completed',
 };
 
+/* Skeleton card for loading state */
+function SkeletonBooking() {
+  return (
+    <div className="booking-card" style={{ pointerEvents: 'none' }}>
+      <div className="booking-card-header">
+        <div className="skeleton skeleton-text" style={{ width: '50%', height: '18px' }}></div>
+        <div className="skeleton" style={{ width: '75px', height: '26px', borderRadius: '9999px' }}></div>
+      </div>
+      <div className="booking-card-body" style={{ marginTop: 12 }}>
+        <div className="skeleton skeleton-text" style={{ width: '70%' }}></div>
+        <div className="skeleton skeleton-text short"></div>
+      </div>
+    </div>
+  );
+}
+
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [hallsMap, setHallsMap] = useState({});
@@ -56,7 +72,11 @@ function MyBookings() {
       )}
 
       {loading ? (
-        <div className="loading">Loading...</div>
+        <div className="bookings-list">
+          <SkeletonBooking />
+          <SkeletonBooking />
+          <SkeletonBooking />
+        </div>
       ) : bookings.length === 0 ? (
         <div className="empty-state">
           <span className="empty-icon">📅</span>
@@ -92,26 +112,8 @@ function MyBookings() {
           ))}
         </div>
       )}
-
-      <nav className="bottom-nav">
-        <Link to="/" className="nav-item">
-          <span className="nav-icon">🏠</span>
-          <span>Dashboard</span>
-        </Link>
-        <Link to="/book" className="nav-item">
-          <span className="nav-icon">📅</span>
-          <span>Book</span>
-        </Link>
-        <Link to="/waiting-list" className="nav-item">
-          <span className="nav-icon">⏳</span>
-          <span>Waiting</span>
-        </Link>
-        <Link to="/my-bookings" className="nav-item active">
-          <span className="nav-icon">✓</span>
-          <span>My Bookings</span>
-        </Link>
-      </nav>
     </div>
   );
 }
+
 export default MyBookings;

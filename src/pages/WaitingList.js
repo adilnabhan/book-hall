@@ -25,18 +25,28 @@ function WaitingList() {
     <div className="page">
       <header className="page-header">
         <h1>Waiting List</h1>
-        <p className="subtitle">You’ll be notified when a slot opens</p>
+        <p className="subtitle">You'll be notified when a slot opens</p>
       </header>
 
       {error && (
         <div className="alert alert-error">
           {error}
-          <small>User ID: {userId} (change via localStorage)</small>
+          <small>User ID: {userId}</small>
         </div>
       )}
 
       {loading ? (
-        <div className="loading">Loading...</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="waiting-card" style={{ pointerEvents: 'none' }}>
+              <div className="skeleton skeleton-circle"></div>
+              <div style={{ flex: 1 }}>
+                <div className="skeleton skeleton-text" style={{ width: '60%', height: 16 }}></div>
+                <div className="skeleton skeleton-text short" style={{ height: 12 }}></div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : items.length === 0 ? (
         <div className="empty-state">
           <span className="empty-icon">✓</span>
@@ -80,25 +90,6 @@ function WaitingList() {
           </div>
         </>
       )}
-
-      <nav className="bottom-nav">
-        <Link to="/" className="nav-item">
-          <span className="nav-icon">🏠</span>
-          <span>Dashboard</span>
-        </Link>
-        <Link to="/book" className="nav-item">
-          <span className="nav-icon">📅</span>
-          <span>Book</span>
-        </Link>
-        <Link to="/waiting-list" className="nav-item active">
-          <span className="nav-icon">⏳</span>
-          <span>Waiting</span>
-        </Link>
-        <Link to="/my-bookings" className="nav-item">
-          <span className="nav-icon">✓</span>
-          <span>My Bookings</span>
-        </Link>
-      </nav>
     </div>
   );
 }
